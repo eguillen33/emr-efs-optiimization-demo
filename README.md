@@ -14,6 +14,7 @@ On the first run, we store dependencies in EFS. On future runs, the EMR cluster 
 {
   "use_efs": true
 }
+```
 
 ## Expectation
 Method | Bootstrap Time
