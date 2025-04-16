@@ -17,6 +17,8 @@ On the first run, we store dependencies in EFS. On future runs, the EMR cluster 
 ```
 
 ## Expectation
-Method | Bootstrap Time
-Remote Fetch | ~30 seconds
-EFS Cache | ~5 seconds
+
+| Method        | Bootstrap Time |
+|---------------|----------------|
+| Remote Fetch  | ~30 seconds    |
+| EFS Cache     | ~5 seconds     |
