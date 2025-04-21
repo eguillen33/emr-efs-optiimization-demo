@@ -9,8 +9,10 @@ EFS_MOUNT_PATH = '/mnt/efs'
 EFS_DNS = os.environ.get('EFS_DNS_NAME')  # Pass in from EMR config
 S3_BUCKET = os.environ.get('S3_BUCKET', 'your-bucket')
 
+
 def log(msg):
     print(f"[fetch_deps] {msg}")
+
 
 def run_cmd(cmd, **kwargs):
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, **kwargs)
@@ -20,9 +22,11 @@ def run_cmd(cmd, **kwargs):
         raise subprocess.CalledProcessError(result.returncode, cmd)
     return result
 
+
 def is_efs_mounted():
     with open("/proc/mounts", "r") as mounts:
         return any(EFS_MOUNT_PATH in line for line in mounts)
+
 
 def mount_efs():
     if is_efs_mounted():
@@ -35,11 +39,13 @@ def mount_efs():
         f"{EFS_DNS}:/", EFS_MOUNT_PATH
     ], check=True)
 
+
 def copy_from_efs():
     log("Copying dependencies from EFS...")
     run_cmd([
         "cp", "-r", os.path.join(EFS_MOUNT_PATH, "dependencies"), LOCAL_DEPS_PATH
     ], check=True)
+
 
 def fetch_from_s3():
     log("Fetching dependencies from S3...")
@@ -50,6 +56,7 @@ def fetch_from_s3():
         "tar", "-xzf", "/tmp/dependencies.tar.gz", "-C", "/home/hadoop/"
     ], check=True)
 
+
 def main():
     with open(CONFIG_PATH) as f:
         config = json.load(f)
@@ -59,6 +66,7 @@ def main():
         copy_from_efs()
     else:
         fetch_from_s3()
+
 
 if __name__ == "__main__":
     try:

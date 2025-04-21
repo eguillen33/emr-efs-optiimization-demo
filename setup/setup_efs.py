@@ -6,8 +6,10 @@ EFS_MOUNT_PATH = '/mnt/efs'
 SRC_DEPS_PATH = '/tmp/my_deps'  # where your deps are temporarily stored
 DEST_DEPS_PATH = os.path.join(EFS_MOUNT_PATH, 'dependencies')
 
+
 def log(msg):
     print(f"[setup_efs] {msg}")
+
 
 def mount_efs(efs_dns):
     log(f"Mounting EFS from {efs_dns}...")
@@ -17,9 +19,11 @@ def mount_efs(efs_dns):
         f"{efs_dns}:/", EFS_MOUNT_PATH
     ], check=True)
 
+
 def copy_to_efs():
     log(f"Copying dependencies from {SRC_DEPS_PATH} to {DEST_DEPS_PATH}...")
     shutil.copytree(SRC_DEPS_PATH, DEST_DEPS_PATH, dirs_exist_ok=True)
+
 
 def main():
     efs_dns = os.environ.get("EFS_DNS_NAME")
@@ -28,6 +32,7 @@ def main():
 
     mount_efs(efs_dns)
     copy_to_efs()
+
 
 if __name__ == "__main__":
     main()
