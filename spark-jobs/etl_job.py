@@ -1,14 +1,11 @@
+# spark-jobs/etl_job.py
+
 from pyspark.sql import SparkSession
 
-def main():
-    spark = SparkSession.builder.appName("SimpleETLJob").getOrCreate()
+spark = SparkSession.builder.appName("ETLDemo").getOrCreate()
 
-    df = spark.read.csv("./datasets/sample_data.csv", header=True, inferSchema=True)
-    filtered = df.filter("value > 10")
+df = spark.read.csv("s3://your-bucket/sample_data.csv", header=True, inferSchema=True)
+df_filtered = df.filter("value > 10")
+df_filtered.write.mode("overwrite").csv("s3://your-bucket/output/")
 
-    filtered.write.mode("overwrite").csv("./output/")
-    print("ETL job complete. Output written to ./output/")
-    spark.stop()
-    
-if __name__ == "__main__":
-    main()
+spark.stop()
